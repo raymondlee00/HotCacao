@@ -1,0 +1,2 @@
+hilaryZ -- 2019-10-20 15:51
+We finished the design document for our project, which includes the component map, database structure, and site map. We discussed all the files and functions that we would need, and split the tasks into two categories (frontend and backend).

@@ -3,10 +3,10 @@
 
 **Roster**
 
-Devin Lin
+Devin Lin: Frontend
 
-Alice Ni
+Alice Ni: Backend
 
-Joseph Yusufov
+Joseph Yusufov: Backend
 
-Hilary Zen
+Hilary Zen: Project Manager
