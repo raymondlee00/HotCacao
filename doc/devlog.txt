@@ -1,2 +1,17 @@
 hilaryZ -- 2019-10-20 15:51
 We finished the design document for our project, which includes the component map, database structure, and site map. We discussed all the files and functions that we would need, and split the tasks into two categories (frontend and backend).
+
+hilaryZ -- 2019-10-22 00:41
+After reviewing design docs from other teams and receiving feedback on our work in class, we decided to improve our document by adding examples of database entries to make those diagrams more clear. We also explained more about the sessions in the component map, and how we intended to use them.
+We also adjusted the structure of our database after learning about joins. Instead of keeping track of the stories a user has edited by storing all the story_ids in a string, we decided to create a new field in the stories table that would store the id of the user who made the change. That way, it would be much easier to track if a user has added to a story already with a simple query.
+JOINS
+	- INNER JOIN compares foreign keys from related tables, and populates a table with data from the selected columns in the parent tables, such that the foreign keys match.
+	- LEFT JOIN goes through every row in the left table searching for a corresponding row in the right table. All of the values of the left table will be copied over to the result. The corresponding (equal) values in the right table when compared to the value in the left table will be placed in the same row of the result. If a row of the left table has no corresponding value in the right table, NULL will fill in all of the columns of the right table at the row of dissimilarity.
+	- USES OF INNER OR LEFT JOIN: ***Useful in displaying stories based on the given project specifications*** Our stories database stores the user_id of whoever edits the story. We can use left join to create a table of story ids that the given user has contributed to and display stories to them accordingly.
+	- CROSS JOIN is given two rows from two different tables, one left and one right. The join adds the left column to the right one, and duplicates all the left entries the same number of times as the total number of right column entries. Eventually, the new table contains all possible combinations of two values.
+"Programming Sucks"
+It was shocking to read an article that was so negative about other people's ability to code. Most people think of coders happily and peacefully working together to create a big project, but instead the author presented an image of individuals frantically trying to fix someone else's dumb mistakes and barely keep everything running. Some of us began questioning our life and career choices. Joseph asked, "Is programming really so futile, since the state of the internet and its associated frameworks are constantly changing? Am I programming my own mind to reject human interaction in favor of explicit logic?" However, in the end the article hammered home the importance of teamwork, communication, and writing "social" code. Some tips we came up with were:
+	- Collaborate while writing code using discord as a means of communication.
+	- Set aside a specific amount of time per day to work on the project - say about half an hour, because spending too long on an assignment in one go doesn’t make for good results. 
+	- Add descriptive comments to explain our code to group mates.
+	- Periodically have another team member review what we wrote to catch errors, or lines that could’ve been written better.

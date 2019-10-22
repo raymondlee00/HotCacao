@@ -1,5 +1,4 @@
-# HotCacao
-**The Cacao Project by HotCacao**
+# The Cacao Project by HotCacao
 
 **Roster**
 
