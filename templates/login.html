@@ -1,0 +1,19 @@
+{% extends "template.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block header %}
+<h1>The Cacao Project Login</h1>
+{% endblock %}
+
+{% block body %}
+<form method="GET" action="/auth">
+  <label>Name</label>
+  <input type="text" name="name"> <br> <br>
+  <label>Password</label>
+  <input type="text" name="password"><br> <br>
+  <input type="submit">
+</form>
+{% endblock %}
