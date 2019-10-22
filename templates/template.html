@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul class=flashes>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+  <body>
+    {% block header %}{% endblock %}
+    {% block body %}{% endblock %}
+    {% block footer %}
+      <footer>
+        <h4>Page created by ©Team HotCacao</h4>
+        <ul>
+          <li>Hilary Zen</li>
+          <li>Devin Lin</li>
+          <li>Alice Ni</li>
+          <li>Joseph Yusufov</li>
+        </ul>
+        <h6>Finished on .......</h6>
+      </footer>
+    {% endblock %}
+  </body>
+</html>
