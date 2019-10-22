@@ -12,13 +12,14 @@ c = db.cursor()  # facilitate db ops
 
 
 # < < < INSERT YOUR POPULATE-THE-DB CODE HERE > > >
-insert_one = "INSERT INTO users(user_id, username, password) VALUES( 1, \"kingthomas13\", \"Lebron23\")"
 
 #==========================================================
 
 # test SQL stmt in sqlite3 shell, save as string
-create_table_users = "CREATE TABLE users(user_id INTEGER PRIMARY KEY, usernamne TEXT, password TEXT, date_created DATETIME DEFAULT current_timestamp);"
+insert_one = "INSERT INTO users(user_id, username, password) VALUES( 1, \"kingthomas13\", \"Lebron23\")"
+create_table_users = "CREATE TABLE users(user_id INTEGER PRIMARY KEY, username TEXT, password TEXT, date_created DATETIME DEFAULT current_timestamp);"
 c.execute(create_table_users)
+c.execute(insert_one)
 #==========================================================
 
 db.commit()  # save changes
