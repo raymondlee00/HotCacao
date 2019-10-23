@@ -17,8 +17,8 @@ app.secret_key = os.urandom(24)
 @app.route('/')  # Login Page
 def index():
     # load the template with the user's session info
-    if session.get("user") == CREDENTIALS.get('user') and session.get("password") == CREDENTIALS.get('password'):
-        return redirect('/auth')
+    # if session.get("user") == CREDENTIALS.get('user') and session.get("password") == CREDENTIALS.get('password'):
+    #     return redirect('/auth')
     return render_template('landing.html')
 
 
@@ -55,7 +55,7 @@ def logout():
     return redirect(url_for("index"))
 
 
-print(CREDENTIALS)
+#print(CREDENTIALS)
 if __name__ == "__main__":
     app.debug = True
     app.run()
