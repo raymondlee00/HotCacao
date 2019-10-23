@@ -2,6 +2,9 @@
 # Joseph Yusufov, Hilary Zen, Alice Ni, Devin Lin
 # 2019-10-22
 
+# DATABASE IS CREATED WITH "db_builder.py"
+# DATABASE IS INTERACTED WITH USING FUNCTIONS IN "db_functions.py"
+
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -9,21 +12,14 @@ from flask import session
 from flask import redirect
 from flask import flash
 from flask import url_for
+import db_functions
 import sqlite3  # enable control of an sqlite database
 import os
 
 app = Flask(__name__)  # create instance of class Flask
 app.secret_key = os.urandom(24)
 
-DB_FILE = "wiki.db"
-db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
-c = db.cursor()  # facilitate db ops
-
-query = "SELECT * FROM users;"
-user_list = c.execute(query)
-for member in user_list:
-    print(member)
-
+db_functions.check_users("hello", "hello") # attempt to call a function in db_functions
 
 @app.route('/')  # Login Page
 def index():
