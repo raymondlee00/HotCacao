@@ -19,13 +19,11 @@ import os
 app = Flask(__name__)  # create instance of class Flask
 app.secret_key = os.urandom(24)
 
-db_functions.check_users("hello", "hello") # attempt to call a function in db_functions
+print(db_functions.check_users("kingthomas13", "Lebron23")) # attempt to call a function in db_functions
 
 @app.route('/')  # Login Page
 def index():
     # load the template with the user's session info
-    if session.get("user") == CREDENTIALS.get('user') and session.get("password") == CREDENTIALS.get('password'):
-        return redirect('/auth')
     return render_template('landing.html')
 
 

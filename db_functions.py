@@ -9,8 +9,9 @@ c = db.cursor()  # facilitate db ops
 #   - true if the username and password match an entry in the users table
 #   - false if the usernmae and password DO NOT match an entry in the users table
 def check_users(username, password):
-    query = "SELECT * FROM users"
-    toprint = c.execute(query)
-    for member in toprint:
-        print(member)
-        
+    query = "SELECT username, password FROM users WHERE users.username = \"%s\" AND users.password = \"%s\";" % (username, password)
+    response = list(c.execute(query))
+    if len(response) == 1:
+        return True
+    else:
+        return False
