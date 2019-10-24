@@ -1,0 +1,16 @@
+{% extends "template.html" %}
+
+{% block title %} Create Story {% endblock %}
+
+{% block header %} The Cacao Project {% endblock %}
+
+{% block body %}
+
+<form action="/create" method="GET">
+  Title: <input type="text" name="title">
+  <br>
+  Text: <input type="text" name="story">
+  <input type="submit" value="Submit">
+</form>
+
+{% endblock %}
