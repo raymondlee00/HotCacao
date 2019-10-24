@@ -57,9 +57,12 @@ def register():
             return redirect(url_for('login'))
     return render_template('register.html')
 
+@app.route('/create')
+def create():
+    if 'user' in session:
+        return render_template('create_story.html')
+        
 
-# @app.route('/create')
-# def create():
 
 
 # @app.route('/modify')
