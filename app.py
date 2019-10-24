@@ -19,7 +19,7 @@ import os
 app = Flask(__name__)  # create instance of class Flask
 app.secret_key = os.urandom(24)
 
-@app.route('/')  
+@app.route('/')
 def index():
     # load the template with the user's session info
     if 'user' in session:
@@ -27,7 +27,7 @@ def index():
     else: return render_template('landing.html')
 
 
-@app.route('/login')  
+@app.route('/login')
 def login():
     if 'user' in session:
         return redirect(url_for('dashboard'))
@@ -39,18 +39,18 @@ def login():
             session['date_created'] = db_functions.get_user_date(request.args.get('username'))
             return redirect(url_for('dashboard'))
         else:
-            flash('Invalid Credentials') 
+            flash('Invalid Credentials')
             return redirect(url_for('login'))
     else: return render_template('login.html')
 
-@app.route('/register')  
+@app.route('/register')
 def register():
     if 'user' in session:
         return redirect(url_for('dashboard'))
     elif request.args:
         if db_functions.checkfor_username(request.args.get('username')):
             flash('Account with that username already exists')
-            return redirect(url_for('register')) 
+            return redirect(url_for('register'))
         else:
             db_functions.create_user(request.args.get('username'), request.args.get('password'))
             flash('Account Created')
@@ -58,15 +58,15 @@ def register():
     return render_template('register.html')
 
 
-# @app.route('/create')  
+# @app.route('/create')
 # def create():
 
 
-# @app.route('/modify')  
+# @app.route('/modify')
 # def modify():
 
 
-@app.route('/dashboard')  
+@app.route('/dashboard')
 def dashboard():
     return render_template('welcome.html', username = session['user'], id = session['id'][0][0], date_created = session['date_created'][0][0]) # modifying checkfor_credentials() might be able to get rid of this "[0][0]" nonsense
 
