@@ -10,7 +10,12 @@
 <h3>Account Number: >>{{id}}<<</h3>
 <h3>Member Since: >>{{date_created}}<<</h3>
 
+<form action="/create" method="GET">
+  <input type="submit" value="Create Story">
+</form>
+
 <form action="/logout" method="GET">
   <input type="submit" value="Logout">
 </form>
+
 {% endblock %}
