@@ -63,3 +63,16 @@ def get_user_date(username):
     db.commit()  # save changes
     db.close()  # close database
     return response
+
+def create_story(story_id, title, text):
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+
+    query = "INSERT INTO stories(story_id, user_id, title, full_text, edit) values(%d, %d, %s, %s, %s);" % (story_id, session['id'], title, text, text)
+
+    response = list(c.execute(query))
+    db.commit()
+    db.close()
+    return response
+    

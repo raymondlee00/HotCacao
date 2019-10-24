@@ -20,6 +20,11 @@ insert_one = "INSERT INTO users(user_id, username, password) VALUES( 1, \"admin\
 create_table_users = "CREATE TABLE users(user_id INTEGER PRIMARY KEY, username TEXT, password TEXT, date_created DATETIME DEFAULT current_timestamp);"
 c.execute(create_table_users)
 c.execute(insert_one)
+
+insert_story = "INSERT INTO stories(story_id, user_id, title, full_text, edit) VALUES( 1, 1, \"hello\", \"The farmer went to the barn and said hello to his animals\", \"The farmer went to the barn and said hello to his animals.\");"
+create_table_stories = "CREATE TABLE stories(story_id INTEGER PRIMARY KEY, user_id INTEGER, title TEXT, full_text TEXT, edit TEXT);"
+c.execute(create_table_stories)
+c.execute(insert_story)
 #==========================================================
 
 db.commit()  # save changes

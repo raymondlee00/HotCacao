@@ -61,13 +61,9 @@ def register():
 def create():
     if 'user' in session:
         return render_template('create_story.html')
-        
-
-
 
 # @app.route('/modify')
 # def modify():
-
 
 @app.route('/dashboard')
 def dashboard():
