@@ -68,7 +68,7 @@ def register():
 
 @app.route('/dashboard')  
 def dashboard():
-    return render_template('welcome.html', username = session['user'], id = session['id'][0][0], date_created = session['date_created'][0][0])
+    return render_template('welcome.html', username = session['user'], id = session['id'][0][0], date_created = session['date_created'][0][0]) # modifying checkfor_credentials() might be able to get rid of this "[0][0]" nonsense
 
 
 # Logout removes the User's session from the dictionary stored on the server, even if the cookie still exists
