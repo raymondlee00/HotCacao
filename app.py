@@ -33,7 +33,6 @@ def index():
 def login():
     if 'user' in session:
         return redirect(url_for('dashboard'))
-    # print(db_functions.check_users(request.args.get('username'), request.args.get('password')))
     elif request.args:
         if db_functions.check_users(request.args.get('username'), request.args.get('password')):
             session['user'] = request.args.get('username')
@@ -43,10 +42,9 @@ def login():
             flash('Invalid Credentials') 
             return redirect(url_for('login'))
     else: return render_template('login.html')
-    # return   render_template('login.html')
 
-# @app.route('/register')  
-# def register():
+@app.route('/register')  
+def register():
 
 
 # @app.route('/create')  
