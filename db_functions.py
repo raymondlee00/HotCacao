@@ -52,7 +52,6 @@ def get_user_id(username):
     response = list(c.execute(query))
     db.commit()  # save changes
     db.close()  # close database
-    print(response)
     return response
 
 
@@ -65,5 +64,4 @@ def get_user_date(username):
     response = list(c.execute(query))
     db.commit()  # save changes
     db.close()  # close database
-
     return response
