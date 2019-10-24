@@ -23,3 +23,7 @@ have a cleaner app.py that can be read by a human with more ease.
 yusufovJ -- 2019-10-24 00:10
 functioning login system that checks user's field inputs against 'user' table in the db,
 and redirects them accordingly.
+
+yusufovJ -- 2019-10-24 00:55
+Register system now works as well. Hurrah! gives approprpate warnings when trying to
+create an account with a username that is already taken.

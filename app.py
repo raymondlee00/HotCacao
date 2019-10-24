@@ -19,8 +19,6 @@ import os
 app = Flask(__name__)  # create instance of class Flask
 app.secret_key = os.urandom(24)
 
-# print(db_functions.check_users("kingthomas13", "Lebron23")) # attempt to call a function in db_functions
-
 @app.route('/')  
 def index():
     # load the template with the user's session info
@@ -34,9 +32,11 @@ def login():
     if 'user' in session:
         return redirect(url_for('dashboard'))
     elif request.args:
-        if db_functions.check_users(request.args.get('username'), request.args.get('password')):
+        if db_functions.checkfor_credentials(request.args.get('username'), request.args.get('password')):
             session['user'] = request.args.get('username')
             session['password'] = request.args.get('password')
+            session['id'] = db_functions.get_user_id(request.args.get('username'))
+            session['date_created'] = db_functions.get_user_date(request.args.get('username'))
             return redirect(url_for('dashboard'))
         else:
             flash('Invalid Credentials') 
@@ -45,6 +45,17 @@ def login():
 
 @app.route('/register')  
 def register():
+    if 'user' in session:
+        return redirect(url_for('dashboard'))
+    elif request.args:
+        if db_functions.checkfor_username(request.args.get('username')):
+            flash('Account with that username already exists')
+            return redirect(url_for('register')) 
+        else:
+            db_functions.create_user(request.args.get('username'), request.args.get('password'))
+            flash('Account Created')
+            return redirect(url_for('login'))
+    return render_template('register.html')
 
 
 # @app.route('/create')  
@@ -57,7 +68,7 @@ def register():
 
 @app.route('/dashboard')  
 def dashboard():
-    return render_template('welcome.html', username = session['user'])
+    return render_template('welcome.html', username = session['user'], id = session['id'][0][0], date_created = session['date_created'][0][0])
 
 
 # Logout removes the User's session from the dictionary stored on the server, even if the cookie still exists
