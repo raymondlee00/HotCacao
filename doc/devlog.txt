@@ -19,3 +19,7 @@ It was shocking to read an article that was so negative about other people's abi
 yusufovJ -- 2019-10-22 01:06
 moved all database interaction into a seperate interface file that will allow us to 
 have a cleaner app.py that can be read by a human with more ease.
+
+yusufovJ -- 2019-10-24 00:10
+functioning login system that checks user's field inputs against 'user' table in the db,
+and redirects them accordingly.
