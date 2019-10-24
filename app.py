@@ -59,14 +59,23 @@ def register():
 
 @app.route('/create')
 def create():
-    if 'user' in session:
-        return render_template('create_story.html')
+    if not 'user' in session:
+        flash('Not Logged in')
+        return redirect(url_for('index'))
+    elif request.args:
+        db_functions.create_story(session['user'], request.args.get('title'), request.args.get('text'))
+        flash('Created Story')
+        return redirect(url_for('dashboard'))
+    return render_template("create_story.html")
 
 # @app.route('/modify')
 # def modify():
 
 @app.route('/dashboard')
 def dashboard():
+    if not 'user' in session:
+        flash('Not Logged in')
+        return redirect(url_for('index'))
     return render_template('welcome.html', username = session['user'], id = session['id'][0][0], date_created = session['date_created'][0][0]) # modifying checkfor_credentials() might be able to get rid of this "[0][0]" nonsense
 
 
