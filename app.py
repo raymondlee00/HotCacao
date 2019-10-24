@@ -58,8 +58,8 @@ def register():
     return render_template('register.html')
 
 
-# @app.route('/create')
-# def create():
+@app.route('/create')
+def create():
 
 
 # @app.route('/modify')
