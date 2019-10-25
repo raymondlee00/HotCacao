@@ -75,3 +75,7 @@ def create_story(user_id, title, text):
     db.commit()
     db.close()
     return response
+
+
+def modify_story(story_id, user_id, edit):
+    return
