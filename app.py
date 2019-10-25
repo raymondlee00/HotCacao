@@ -68,8 +68,9 @@ def create():
         return redirect(url_for('dashboard'))
     return render_template("create_story.html")
 
-# @app.route('/modify')
-# def modify():
+@app.route('/modify')
+def modify():
+    return render_template("modifyStory.html")
 
 @app.route('/dashboard')
 def dashboard():
