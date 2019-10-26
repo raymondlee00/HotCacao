@@ -69,12 +69,24 @@ def create_story(user_id, title, text):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
-    query = "INSERT INTO stories(users_edited, title, full_text, edit) values(\"%s\", \"%s\", \"%s\", \"%s\");" % ((str)(user_id), title, text, text)
+    print(user_id)
+    print(user_id[0])
+    print(user_id[0][0])
+    query = "INSERT INTO stories( author_id, title, body) VALUES(%s, \"%s\", \"%s\");" % ((str)(user_id[0][0]), title, text)
+    c.execute(query)
 
-    response = list(c.execute(query))
+    retrieve_last_id = "SELECT story_id FROM stories ORDER BY story_id DESC LIMIT 1;"
+    last_story_id_tuple = c.execute(retrieve_last_id)
+    last_story_id = ""
+    for member in last_story_id_tuple:
+        last_story_id = member[0]
+        # last_story_id += 1
+    
+    query = "INSERT INTO edits(story_id, user_id, edit) VALUES(%s, %s, \"%s\");" % (last_story_id, user_id[0][0], text) 
+    c.execute(query)
+
     db.commit()
     db.close()
-    return response
 
 
 def modify_story(story_id, user_id, edit):
