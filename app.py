@@ -63,7 +63,7 @@ def create():
         flash('Not Logged in')
         return redirect(url_for('index'))
     elif request.args:
-        db_functions.create_story(session['user'], request.args.get('title'), request.args.get('text'))
+        db_functions.create_story(session['id'], request.args.get('title'), request.args.get('text'))
         flash('Created Story')
         return redirect(url_for('dashboard'))
     return render_template("create_story.html")
