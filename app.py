@@ -70,6 +70,9 @@ def create():
 
 @app.route('/modify')
 def modify():
+    if not 'user' in session:
+        flash('Not Logged In')
+        return redirect(url_for('index'))
     return render_template("modifyStory.html")
 
 @app.route('/dashboard')
