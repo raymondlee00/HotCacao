@@ -27,3 +27,8 @@ and redirects them accordingly.
 yusufovJ -- 2019-10-24 00:55
 Register system now works as well. Hurrah! gives approprpate warnings when trying to
 create an account with a username that is already taken.
+
+yusufovJ -- 2019-10-25 21:26
+Completed create_story() function, added in "edits" table to facilitate more logical
+maintanence of the database. Adding story functionality works, but user can still not
+see or edit existing stories.

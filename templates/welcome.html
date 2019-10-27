@@ -9,13 +9,31 @@
 <h3>You Are: >>{{username}}<<</h3>
 <h3>Account Number: >>{{id}}<<</h3>
 <h3>Member Since: >>{{date_created}}<<</h3>
-
+<br>
+<hr>
+{% for member in stories %}
+  <div class="story-wrapper">
+    <h2>Title: <b>{{member[2]}}</b></h2>
+    <h3>{{member[3]}}</h3>
+    <form action="/mosify">
+      <input type="hidden" name="story_id" value="{{member[0]}}">
+      <input type="hidden" name="story_title" value="{{member[2]}}">
+      <input type="hidden" name="story_body" value="{{member[3]}}">
+    </form>  
+  </div>
+  <hr>
+{% endfor %}
 <form action="/create" method="GET">
-  <input type="submit" value="Create Story">
+  <input type="submit" value="Create New Story">
+</form>
+
+<form action="/modify" method="GET">
+  <input type="submit" value="Browse Stories">
 </form>
 
 <form action="/logout" method="GET">
   <input type="submit" value="Logout">
-</form>
+</form>  
+
 
 {% endblock %}

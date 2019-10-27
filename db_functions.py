@@ -69,9 +69,97 @@ def create_story(user_id, title, text):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
-    query = "INSERT INTO stories(users_edited, title, full_text, edit) values(\"%s\", \"%s\", \"%s\", \"%s\");" % ((str)(user_id), title, text, text)
+    print(user_id)
+    print(user_id[0])
+    print(user_id[0][0])
+    query = "INSERT INTO stories( author_id, title, body) VALUES(%s, \"%s\", \"%s\");" % ((str)(user_id[0][0]), title, text)
+    c.execute(query)
 
-    response = list(c.execute(query))
+    retrieve_last_id = "SELECT story_id FROM stories ORDER BY story_id DESC LIMIT 1;"
+    last_story_id_tuple = c.execute(retrieve_last_id)
+    last_story_id = ""
+    for member in last_story_id_tuple:
+        last_story_id = member[0]
+        # last_story_id += 1
+    
+    query = "INSERT INTO edits(story_id, user_id, edit) VALUES(%s, %s, \"%s\");" % (last_story_id, user_id[0][0], text) 
+    c.execute(query)
+
     db.commit()
     db.close()
-    return response
+
+
+def get_user_stories(user_id):
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+
+    get_stories = "SELECT story_id FROM edits WHERE user_id = %s;" % user_id
+    stories_edited_tuple = list(c.execute(get_stories))
+    toreturn = []
+    for member in stories_edited_tuple:
+        story_id = member[0]
+        story_info = c.execute("SELECT * FROM stories WHERE stories.story_id = %s" % (story_id)) 
+        for entry in story_info:
+            toreturn.append(entry)
+    
+    db.commit()  # save changes
+    db.close()  # close database
+    return toreturn
+
+def get_other_stories(user_id):
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+
+    other_stories_query = """
+    SELECT * FROM stories LEFT JOIN edits ON edits.story_id = (
+        SELECT story_id FROM edits
+        WHERE edits.story_id = stories.story_id
+        AND edits.user_id <> 1
+        ORDER BY edits.timestamp DESC
+        LIMIT 1
+    );""" 
+    result_other_stories = list(c.execute(other_stories_query))
+    db.commit()  # save changes
+    db.close()  # close database
+    return result_other_stories
+
+def get_user_by_id(user_id):
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+
+    query = "SELECT username FROM users WHERE user_id == \"%s\";" % (user_id)
+    response = list(c.execute(query))
+    username = response[0][0]
+    db.commit()  # save changes
+    db.close()  # close database
+    return username
+
+def modify_story(story_id, user_id, edit):
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+    
+    body_results = list(c.execute("SELECT body FROM stories WHERE story_id = %s" % story_id))
+    body = ""
+    for b in body_results:
+        body = b[0]
+    update_stories = """
+        UPDATE stories
+        SET body = \"%s\" 
+        WHERE story_id = %s;
+        """ % ((body + " " + edit), story_id)
+    c.execute(update_stories)
+
+    update_edits = """
+        INSERT INTO edits(story_id, user_id, edit)
+        VALUES(%s, %s, \"%s\")
+        """ % (story_id, user_id, edit)
+    c.execute(update_edits)
+
+    db.commit()  # save changes
+    db.close()  # close database
+
+

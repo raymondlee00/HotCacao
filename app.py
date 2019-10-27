@@ -18,7 +18,6 @@ import os
 
 app = Flask(__name__)  # create instance of class Flask
 app.secret_key = os.urandom(24)
-
 @app.route('/')
 def index():
     # load the template with the user's session info
@@ -63,21 +62,29 @@ def create():
         flash('Not Logged in')
         return redirect(url_for('index'))
     elif request.args:
-        db_functions.create_story(session['user'], request.args.get('title'), request.args.get('text'))
+        db_functions.create_story(session['id'], request.args.get('title'), request.args.get('text'))
         flash('Created Story')
         return redirect(url_for('dashboard'))
     return render_template("create_story.html")
 
 @app.route('/modify')
 def modify():
-    return render_template("modifyStory.html")
+    if not 'user' in session:
+        flash('Not Logged In')
+        return redirect(url_for('index'))
+    elif request.args:
+        db_functions.modify_story(request.args.get('story_id'), session['id'][0][0], request.args.get('edit'))
+        flash('Added to Story')
+        return redirect(url_for('dashboard'))
+    return render_template('modify.html', stories = db_functions.get_other_stories(session['id'][0][0]))
+
 
 @app.route('/dashboard')
 def dashboard():
     if not 'user' in session:
         flash('Not Logged in')
         return redirect(url_for('index'))
-    return render_template('welcome.html', username = session['user'], id = session['id'][0][0], date_created = session['date_created'][0][0]) # modifying checkfor_credentials() might be able to get rid of this "[0][0]" nonsense
+    return render_template('welcome.html', username = session['user'], id = session['id'][0][0], date_created = session['date_created'][0][0], stories = db_functions.get_user_stories(session['id'][0][0])) # modifying checkfor_credentials() might be able to get rid of this "[0][0]" nonsense
 
 
 # Logout removes the User's session from the dictionary stored on the server, even if the cookie still exists
