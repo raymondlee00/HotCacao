@@ -113,13 +113,14 @@ def get_other_stories(user_id):
     c = db.cursor()  # facilitate db ops
 
     other_stories_query = """
-    SELECT * FROM stories LEFT JOIN edits ON edits.story_id = (
+    SELECT * FROM stories 
+    INNER JOIN edits ON edits.story_id = (
         SELECT story_id FROM edits
         WHERE edits.story_id = stories.story_id
-        AND edits.user_id <> 1
+        AND edits.user_id <> %s
         ORDER BY edits.timestamp DESC
         LIMIT 1
-    );""" 
+    )AND edits.user_id <> %s;""" % (user_id, user_id) 
     result_other_stories = list(c.execute(other_stories_query))
     db.commit()  # save changes
     db.close()  # close database
@@ -162,4 +163,15 @@ def modify_story(story_id, user_id, edit):
     db.commit()  # save changes
     db.close()  # close database
 
-
+SELECT * FROM stories 
+INNER JOIN edits ON 
+edits.story_id = (
+    SELECT edits.story_id FROM edits, stories
+    WHERE edits.story_id = stories.story_id
+    AND edits.story_id IS NOT (
+        SELECT story_id FROM edits
+        WHERE user_id = 3
+    )   
+    ORDER BY edits.timestamp DESC
+    LIMIT 1
+);

@@ -32,3 +32,9 @@ yusufovJ -- 2019-10-25 21:26
 Completed create_story() function, added in "edits" table to facilitate more logical
 maintanence of the database. Adding story functionality works, but user can still not
 see or edit existing stories.
+
+yusufovJ -- 2019-10-27 15:48
+Been having a massive struggle with the get_other_stories() function, the SQL code
+returns a list that includes rows representing stories that the user has already 
+added to. Might have to make some simpler design decisions, meaning divide the 
+process into multiple steps, rather than having one long and complicated SQL query.
