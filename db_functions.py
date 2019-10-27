@@ -119,7 +119,7 @@ def get_other_stories(user_id):
         AND edits.user_id <> 1
         ORDER BY edits.timestamp DESC
         LIMIT 1
-    );""" % user_id
+    );""" 
     result_other_stories = list(c.execute(other_stories_query))
     db.commit()  # save changes
     db.close()  # close database
@@ -141,15 +141,16 @@ def modify_story(story_id, user_id, edit):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
+    
     body_results = list(c.execute("SELECT body FROM stories WHERE story_id = %s" % story_id))
     body = ""
-    for member in body_results:
-        body = member[0][0]
+    for b in body_results:
+        body = b[0]
     update_stories = """
         UPDATE stories
         SET body = \"%s\" 
         WHERE story_id = %s;
-        """ % ((body + edit), story_id)
+        """ % ((body + " " + edit), story_id)
     c.execute(update_stories)
 
     update_edits = """
@@ -160,3 +161,5 @@ def modify_story(story_id, user_id, edit):
 
     db.commit()  # save changes
     db.close()  # close database
+
+
