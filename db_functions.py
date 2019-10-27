@@ -81,8 +81,8 @@ def create_story(user_id, title, text):
     for member in last_story_id_tuple:
         last_story_id = member[0]
         # last_story_id += 1
-    
-    query = "INSERT INTO edits(story_id, user_id, edit) VALUES(%s, %s, \"%s\");" % (last_story_id, user_id[0][0], text) 
+
+    query = "INSERT INTO edits(story_id, user_id, edit) VALUES(%s, %s, \"%s\");" % (last_story_id, user_id[0][0], text)
     c.execute(query)
 
     db.commit()
@@ -97,12 +97,15 @@ def get_user_stories(user_id):
     get_stories = "SELECT story_id FROM edits WHERE user_id = %s;" % user_id
     stories_edited_tuple = list(c.execute(get_stories))
     toreturn = []
+    story_id_store = list() # this is used to store story ids to stop display of repeating stories
     for member in stories_edited_tuple:
-        story_id = member[0]
-        story_info = c.execute("SELECT * FROM stories WHERE stories.story_id = %s" % (story_id)) 
-        for entry in story_info:
-            toreturn.append(entry)
-    
+        if member[0] not in story_id_store:
+            story_id = member[0]
+            story_info = c.execute("SELECT * FROM stories WHERE stories.story_id = %s" % (story_id))
+            for entry in story_info:
+                toreturn.append(entry)
+        story_id_store.append(member[0])
+
     db.commit()  # save changes
     db.close()  # close database
     return toreturn
@@ -119,7 +122,7 @@ def get_other_stories(user_id):
         AND edits.user_id <> 1
         ORDER BY edits.timestamp DESC
         LIMIT 1
-    );""" 
+    );"""
     result_other_stories = list(c.execute(other_stories_query))
     db.commit()  # save changes
     db.close()  # close database
@@ -141,14 +144,14 @@ def modify_story(story_id, user_id, edit):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
-    
+
     body_results = list(c.execute("SELECT body FROM stories WHERE story_id = %s" % story_id))
     body = ""
     for b in body_results:
         body = b[0]
     update_stories = """
         UPDATE stories
-        SET body = \"%s\" 
+        SET body = \"%s\"
         WHERE story_id = %s;
         """ % ((body + " " + edit), story_id)
     c.execute(update_stories)
@@ -161,5 +164,3 @@ def modify_story(story_id, user_id, edit):
 
     db.commit()  # save changes
     db.close()  # close database
-
-
