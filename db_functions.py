@@ -124,9 +124,13 @@ def get_other_stories(user_id):
         LIMIT 1
     );"""
     result_other_stories = list(c.execute(other_stories_query))
-    # through testing, the element closest to the front of the list is the most recent edit of the story
+    # through testing, the element closest to the end of the list is the most recent edit of the story
+    result_other_stories.reverse()
     filtered_list = list()
     story_id_store = list()
+    for entry in result_other_stories:
+        if entry[5] == user_id: # entry[5] is who edited the story
+            story_id_store.append(entry[0])
     for entry in result_other_stories:
         #print(entry)
         if entry[0] not in story_id_store:
@@ -134,6 +138,7 @@ def get_other_stories(user_id):
             story_id_store.append(entry[0])
     db.commit()  # save changes
     db.close()  # close database
+    print(filtered_list)
     return filtered_list
 
 def get_user_by_id(user_id):

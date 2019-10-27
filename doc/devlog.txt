@@ -35,3 +35,5 @@ see or edit existing stories.
 
 LinD -- 2019-10-27 16:06
 Fixed get_user_stories in db_functions to not repeatedly display the same story_id
+Fixed get_other_stories in db_functions to show only the most recent edit and not repeatedly display the same story
+Made it so that users cannot edit the same story twice.
