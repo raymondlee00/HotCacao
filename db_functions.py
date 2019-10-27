@@ -89,5 +89,74 @@ def create_story(user_id, title, text):
     db.close()
 
 
+def get_user_stories(user_id):
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+
+    get_stories = "SELECT story_id FROM edits WHERE user_id = %s;" % user_id
+    stories_edited_tuple = list(c.execute(get_stories))
+    toreturn = []
+    for member in stories_edited_tuple:
+        story_id = member[0]
+        story_info = c.execute("SELECT * FROM stories WHERE stories.story_id = %s" % (story_id)) 
+        for entry in story_info:
+            toreturn.append(entry)
+    
+    db.commit()  # save changes
+    db.close()  # close database
+    return toreturn
+
+def get_other_stories(user_id):
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+
+    other_stories_query = """
+    SELECT * FROM stories LEFT JOIN edits ON edits.story_id = (
+        SELECT story_id FROM edits
+        WHERE edits.story_id = stories.story_id
+        AND edits.user_id <> 1
+        ORDER BY edits.timestamp DESC
+        LIMIT 1
+    );""" % user_id
+    result_other_stories = list(c.execute(other_stories_query))
+    db.commit()  # save changes
+    db.close()  # close database
+    return result_other_stories
+
+def get_user_by_id(user_id):
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+
+    query = "SELECT username FROM users WHERE user_id == \"%s\";" % (user_id)
+    response = list(c.execute(query))
+    username = response[0][0]
+    db.commit()  # save changes
+    db.close()  # close database
+    return username
+
 def modify_story(story_id, user_id, edit):
-    return
+    DB_FILE = "wiki.db"
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()  # facilitate db ops
+    body_results = list(c.execute("SELECT body FROM stories WHERE story_id = %s" % story_id))
+    body = ""
+    for member in body_results:
+        body = member[0][0]
+    update_stories = """
+        UPDATE stories
+        SET body = \"%s\" 
+        WHERE story_id = %s;
+        """ % ((body + edit), story_id)
+    c.execute(update_stories)
+
+    update_edits = """
+        INSERT INTO edits(story_id, user_id, edit)
+        VALUES(%s, %s, \"%s\")
+        """ % (story_id, user_id, edit)
+    c.execute(update_edits)
+
+    db.commit()  # save changes
+    db.close()  # close database

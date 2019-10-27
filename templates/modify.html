@@ -1,0 +1,33 @@
+{% extends "template.html" %}
+
+{% block title %}
+Browse Stories
+{% endblock %}
+
+{% block header %}
+<h1>Browse and Add to Stories</h1>
+<form action="/dashboard" method="GET">
+  <input type="submit" value="Back to Dashboard">
+</form>
+<hr>
+
+{% endblock %}
+
+{% block body %}
+{% for member in stories %}
+  <div class="story-wrapper">
+    <h2>Title: <b>{{member[2]}}</b></h2>
+    <h3>Last Edit: "{{member[6]}}"</h3>
+    <h6>At: {{member[7]}}</h6>
+    <form action="/modify">
+      <input type="hidden" name="story_id" value="{{member[0]}}">
+      <label for="edit">Write Your Addendum</label> <br>
+      <textarea display="block" name="edit" cols="50" rows="5"></textarea>
+      <br>
+      <button type="submit">Submit to "{{member[2]}}"</button>
+    </form>  
+  </div>
+  <br>
+  <hr>
+{% endfor %}
+{% endblock %}
