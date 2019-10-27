@@ -69,9 +69,9 @@ def create_story(user_id, title, text):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
-    print(user_id)
-    print(user_id[0])
-    print(user_id[0][0])
+    # print(user_id)
+    # print(user_id[0])
+    # print(user_id[0][0])
     query = "INSERT INTO stories( author_id, title, body) VALUES(%s, \"%s\", \"%s\");" % ((str)(user_id[0][0]), title, text)
     c.execute(query)
 
@@ -124,9 +124,17 @@ def get_other_stories(user_id):
         LIMIT 1
     );"""
     result_other_stories = list(c.execute(other_stories_query))
+    # through testing, the element closest to the front of the list is the most recent edit of the story
+    filtered_list = list()
+    story_id_store = list()
+    for entry in result_other_stories:
+        #print(entry)
+        if entry[0] not in story_id_store:
+            filtered_list.append(entry)
+            story_id_store.append(entry[0])
     db.commit()  # save changes
     db.close()  # close database
-    return result_other_stories
+    return filtered_list
 
 def get_user_by_id(user_id):
     DB_FILE = "wiki.db"
