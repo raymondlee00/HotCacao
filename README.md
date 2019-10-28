@@ -36,7 +36,7 @@ pip3 install flask
 3. If you already have a wiki.db file, run the following command to delete it:
 
 ```
-rm db_builder.py
+rm wiki.db
 ```
 
 Now all users should run:
