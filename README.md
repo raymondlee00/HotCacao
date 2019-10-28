@@ -33,7 +33,13 @@ python3 -m venv myvenv
 pip3 install flask
 ```
 
-3. If you already have a wiki.db file, skip this step. If you do not, run:
+3. If you already have a wiki.db file, run the following command to delete it:
+
+```
+rm db_builder.py
+```
+
+Now all users should run:
 
 ```
 python3 db_builder.py
