@@ -184,7 +184,6 @@ def modify_story(story_id, user_id, edit):
     db.close()  # close database
 
 
-
     # SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
     #     SELECT story_id FROM edits
     #     WHERE edits.story_id = stories.story_id
@@ -195,3 +194,61 @@ def modify_story(story_id, user_id, edit):
     #     ORDER BY edits.timestamp DESC
     #     LIMIT 1
     # )
+
+# SELECT edits.story_id FROM edits, stories
+# WHERE edits.story_id = stories.story_id
+# AND edits.story_id NOT IN(
+#     SELECT story_id FROM edits
+#     WHERE edits.user_id=3
+# )
+# ORDER BY edits.timestamp DESC
+# LIMIT 1
+
+
+# select * from stories inner join(
+#     select distinct on(story_id) * from edits
+#     order by date_created desc
+# ) as most_recent_story_edit
+# on stories.story_id = most_recent_story_edit.story_id;
+
+# SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
+#     SELECT story_id FROM edits
+#     WHERE edits.story_id=stories.story_id
+#     AND edits.story_id NOT IN(
+#         SELECT story_id FROM edits
+#         WHERE edits.user_id=3
+#     )
+#     ORDER BY edits.timestamp DESC
+#     LIMIT 1
+# );
+
+# SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
+#     SELECT story_id FROM edits
+#     WHERE edits.story_id=stories.story_id
+#     AND edits.story_id NOT IN(
+#         SELECT story_id FROM edits
+#         WHERE edits.user_id= 3
+#     )
+#     ORDER BY edits.timestamp DESC
+#     LIMIT 1
+# );
+
+# SELECT * FROM stories INNER JOIN (
+#     SELECT edits.story_id, edits.user_id, edit, timestamp FROM edits, stories
+#     WHERE edits.story_id=stories.story_id
+#     ORDER BY edits.timestamp DESC
+#     LIMIT 1
+# ) as most_recent_edit
+# ON most_recent_edit.story_id = stories.story_id
+
+# select * from stories inner join(
+#     select * from edits
+#     order by story_id, timestamp desc
+# ) as most_recent_edit
+# on stories.story_id = most_recent_edit.story_id
+
+
+#    AND edits.story_id NOT IN(
+#        SELECT story_id FROM edits
+#        WHERE edits.user_id=4
+#    )
