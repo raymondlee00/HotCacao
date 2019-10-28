@@ -116,30 +116,35 @@ def get_other_stories(user_id):
     c = db.cursor()  # facilitate db ops
 
     other_stories_query = """
-    SELECT * FROM stories LEFT JOIN edits ON edits.story_id = (
+    SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
         SELECT story_id FROM edits
-        WHERE edits.story_id = stories.story_id
-        AND edits.user_id <> 1
+        WHERE edits.story_id=stories.story_id
+        AND edits.story_id NOT IN (
+            SELECT story_id FROM edits
+            WHERE edits.user_id = %s
+        )
         ORDER BY edits.timestamp DESC
         LIMIT 1
-    );"""
+    );""" % user_id
     result_other_stories = list(c.execute(other_stories_query))
+    print(result_other_stories)
+    return(result_other_stories)
     # through testing, the element closest to the end of the list is the most recent edit of the story
-    result_other_stories.reverse()
-    filtered_list = list()
-    story_id_store = list()
-    for entry in result_other_stories:
-        if entry[5] == user_id: # entry[5] is who edited the story
-            story_id_store.append(entry[0])
-    for entry in result_other_stories:
-        #print(entry)
-        if entry[0] not in story_id_store:
-            filtered_list.append(entry)
-            story_id_store.append(entry[0])
-    db.commit()  # save changes
-    db.close()  # close database
-    print(filtered_list)
-    return filtered_list
+    # result_other_stories.reverse()
+    # filtered_list = list()
+    # story_id_store = list()
+    # for entry in result_other_stories:
+    #     if entry[5] == user_id: # entry[5] is who edited the story
+    #         story_id_store.append(entry[0])
+    # for entry in result_other_stories:
+    #     #print(entry)
+    #     if entry[0] not in story_id_store:
+    #         filtered_list.append(entry)
+    #         story_id_store.append(entry[0])
+    # db.commit()  # save changes
+    # db.close()  # close database
+    # print(filtered_list)
+    # return filtered_list
 
 def get_user_by_id(user_id):
     DB_FILE = "wiki.db"
@@ -177,3 +182,16 @@ def modify_story(story_id, user_id, edit):
 
     db.commit()  # save changes
     db.close()  # close database
+
+
+
+    # SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
+    #     SELECT story_id FROM edits
+    #     WHERE edits.story_id = stories.story_id
+    #     AND edits.story_id NOT IN(
+    #         SELECT story_id FROM edits
+    #         WHERE edits.user_id = 3
+    #     )
+    #     ORDER BY edits.timestamp DESC
+    #     LIMIT 1
+    # )
