@@ -1,3 +1,11 @@
+# Team HotCocao
+# Joseph Yusufov, Hilary Zen, Alice Ni, Devin Lin
+# 2019-10-28
+
+# DATABASE IS CREATED WITH "db_builder.py"
+# DATABASE IS INTERACTED WITH USING FUNCTIONS IN "db_functions.py in utl"
+
+
 import sqlite3  # enable control of an sqlite database
 DB_FILE = "wiki.db"
 db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -119,10 +127,10 @@ def get_user_stories(user_id):
         if member[0] not in story_id_store:
             story_id = member[0]
             story_info = c.execute("SELECT * FROM stories WHERE stories.story_id = %s" % (story_id))
-    story_id_store fo:
-    story_id_store ntry)
-    story_id_store ber[0])
-    story_id_store 
+            for entry in story_info:
+                toreturn.append(entry)
+        story_id_store.append(member[0])
+
     db.commit()  # save changes
     db.close()  # close database
     return toreturn

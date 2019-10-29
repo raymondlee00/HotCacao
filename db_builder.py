@@ -1,9 +1,8 @@
 # Team HotCocao
 # Joseph Yusufov, Hilary Zen, Alice Ni, Devin Lin
-# 2019-10-22
+# 2019-10-28
 
 import sqlite3  # enable control of an sqlite database
-import csv  # facilitate CSV I/O
 
 DB_FILE = "wiki.db"
 

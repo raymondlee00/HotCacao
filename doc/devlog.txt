@@ -52,6 +52,6 @@ Completed get_other_stories() function, using the afforementioned method of spli
 the task into multiple queries/steps rather than one. Pushing to test on a different 
 machine (Ubuntu).
 
-josephY -- 2019-10-29 00:20
+josephY -- 2019-10-29 00:40
 Added comments in all functions of db_functions file, and in the headers of all files 
 
