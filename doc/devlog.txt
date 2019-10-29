@@ -33,11 +33,12 @@ Completed create_story() function, added in "edits" table to facilitate more log
 maintenence of the database. Adding story functionality works, but user can still not
 see or edit existing stories.
 
-yusufovJ -- 2019-10-27 15:48
+josephY -- 2019-10-27 15:48
 Been having a massive struggle with the get_other_stories() function, the SQL code
 returns a list that includes rows representing stories that the user has already 
 added to. Might have to make some simpler design decisions, meaning divide the 
 process into multiple steps, rather than having one long and complicated SQL query.
+
 devinL -- 2019-10-27 16:06
 Fixed get_user_stories in db_functions to not repeatedly display the same story_id
 Fixed get_other_stories in db_functions to show only the most recent edit and not repeatedly display the same story
@@ -47,5 +48,10 @@ hilaryZ -- 2019-10-27 21:56
 Added updated design.pdf with example of Joseph's edits table, and fixed README instructions.
 
 josephY -- 2019-10-28 23:05
-Completed get_other_stories() function, pushing to test on a different machine.
+Completed get_other_stories() function, using the afforementioned method of splitting
+the task into multiple queries/steps rather than one. Pushing to test on a different 
+machine (Ubuntu).
+
+josephY -- 2019-10-29 00:20
+Added comments in all functions of db_functions file, and in the headers of all files 
 

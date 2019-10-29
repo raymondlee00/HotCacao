@@ -3,8 +3,9 @@ DB_FILE = "wiki.db"
 db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
 c = db.cursor()  # facilitate db ops
 
-# checkfor_credentials()
-# - @return username and password of accounts that meet the credentials in the password (either an empty touple or 1-sized touple)
+# @param username provided by user
+# @param password provided by user
+# @return username and password of accounts that meet the credentials in the password (either an empty touple or 1-sized touple)
 def checkfor_credentials(username, password):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -15,9 +16,11 @@ def checkfor_credentials(username, password):
     db.commit()  # save changes
     db.close()  # close database
 
-    return response
+    return response # returns null if credentials are wrong, and the correct info if correct
 
 
+# @param username of a user
+# @return null if the username does not exist, or a list containing the username if it does exsit.
 def checkfor_username(username):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -31,6 +34,9 @@ def checkfor_username(username):
     return response
 
 
+# @param username provided by the user
+# @param passoword provided by the user
+# Creates a new user in the users table with the supplied username and password
 def create_user(username, password):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -41,9 +47,9 @@ def create_user(username, password):
     db.commit()  # save changes
     db.close()  # close database
 
-    return response
 
-
+# @param username of a user in the users table
+# @return user id associated with that username
 def get_user_id(username):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -56,6 +62,8 @@ def get_user_id(username):
     return response
 
 
+# @param username of a user in the users table
+# @return the date that the user associated with the username provided was created
 def get_user_date(username):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -67,24 +75,28 @@ def get_user_date(username):
     db.close()  # close database
     return response
 
+
+# @param the user id of the user making the story
+# @param the title provided by the creator of the story
+# @param the initial text of the story being created
+# create a story in the stories table with the provided parameters as data
 def create_story(user_id, title, text):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
-    # print(user_id)
-    # print(user_id[0])
-    # print(user_id[0][0])
+    # update stories table with new story
     query = "INSERT INTO stories( author_id, title, body) VALUES(%s, \"%s\", \"%s\");" % ((str)(user_id[0][0]), title, text)
     c.execute(query)
 
+    #update edits story with initial edit for the new story by copying data from the last story created
     retrieve_last_id = "SELECT story_id FROM stories ORDER BY story_id DESC LIMIT 1;"
     last_story_id_tuple = c.execute(retrieve_last_id)
     last_story_id = ""
+    # retrieve story id of the story just created
     for member in last_story_id_tuple:
         last_story_id = member[0]
-        # last_story_id += 1
-
+    # populate the edits table with info on that story, and the initial edit.
     query = "INSERT INTO edits(story_id, user_id, edit) VALUES(%s, %s, \"%s\");" % (last_story_id, user_id[0][0], text)
     c.execute(query)
 
@@ -92,6 +104,8 @@ def create_story(user_id, title, text):
     db.close()
 
 
+# @param user_id of the user for which the function will retrieve stories
+# @return a list of stories that the user has contributed to, including the full text of the stories
 def get_user_stories(user_id):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -105,19 +119,23 @@ def get_user_stories(user_id):
         if member[0] not in story_id_store:
             story_id = member[0]
             story_info = c.execute("SELECT * FROM stories WHERE stories.story_id = %s" % (story_id))
-            for entry in story_info:
-                toreturn.append(entry)
-        story_id_store.append(member[0])
-
+    story_id_store fo:
+    story_id_store ntry)
+    story_id_store ber[0])
+    story_id_store 
     db.commit()  # save changes
     db.close()  # close database
     return toreturn
 
+
+# @param user_id of the user for which the function will retrieve stories
+# @return a list of stories that the user HAS NOT EDITED, returning only the last edit and not the full text.
 def get_other_stories(user_id):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
+    # retrieve the last update associated with each story
     all_stories_query = """
         SELECT stories.title, a.story_id, a.user_id, a.edit, a.timestamp FROM edits a, edits b, stories
         WHERE a.story_id = b.story_id
@@ -127,19 +145,21 @@ def get_other_stories(user_id):
     result_all_stories = list(c.execute(all_stories_query))
     print(result_all_stories)
 
+    # retrieve the story ids that the user has already contributed to
     modified_stories_query = """
         SELECT story_id FROM edits
         WHERE edits.user_id=%s
     """ % user_id
     result_modified_stories = list(c.execute(modified_stories_query))
-    print(result_modified_stories)
-
+    # print(result_modified_stories)
     for member in result_modified_stories:
         member = member[0]
     print(result_modified_stories)
     result_modified_stories = list(dict.fromkeys(result_modified_stories))
     print(result_modified_stories)
 
+    # filter all stories and their associated most recent edits, removing stories that
+    # the user has already contributed to
     for i in range(len(result_all_stories)-1, -1, -1):
         s_id = result_all_stories[i][1]
         print(s_id)
@@ -149,26 +169,13 @@ def get_other_stories(user_id):
                 result_all_stories.remove(result_all_stories[i])
     db.commit()
     db.close()
-    print(result_all_stories)
-    print("----------")
+    # print(result_all_stories)
+    # print("----------")
     return(result_all_stories)
-    # through testing, the element closest to the end of the list is the most recent edit of the story
-    # result_other_stories.reverse()
-    # filtered_list = list()
-    # story_id_store = list()
-    # for entry in result_other_stories:
-    #     if entry[5] == user_id: # entry[5] is who edited the story
-    #         story_id_store.append(entry[0])
-    # for entry in result_other_stories:
-    #     #print(entry)
-    #     if entry[0] not in story_id_store:
-    #         filtered_list.append(entry)
-    #         story_id_store.append(entry[0])
-    # db.commit()  # save changes
-    # db.close()  # close database
-    # print(filtered_list)
-    # return filtered_list
 
+
+# @param user id of a user in the users table
+# @return the username associated with that user id
 def get_user_by_id(user_id):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -181,15 +188,23 @@ def get_user_by_id(user_id):
     db.close()  # close database
     return username
 
+
+# @param the story id of the story to be modified
+# @param the user modifying the story
+# @param the edit that the user is appending to the story
+# updates the story in the stories table, and adds a new entry in the edits table
 def modify_story(story_id, user_id, edit):
     DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
+    # retrieves the current body of the story
     body_results = list(c.execute("SELECT body FROM stories WHERE story_id = %s" % story_id))
     body = ""
     for b in body_results:
         body = b[0]
+
+    # appends edit to the body of the story in the stories table
     update_stories = """
         UPDATE stories
         SET body = \"%s\"
@@ -197,6 +212,7 @@ def modify_story(story_id, user_id, edit):
         """ % ((body + " " + edit), story_id)
     c.execute(update_stories)
 
+    # creates a new entry in the edits table with the provided info
     update_edits = """
         INSERT INTO edits(story_id, user_id, edit)
         VALUES(%s, %s, \"%s\")
@@ -205,105 +221,6 @@ def modify_story(story_id, user_id, edit):
 
     db.commit()  # save changes
     db.close()  # close database
-
-
-    # SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
-    #     SELECT story_id FROM edits
-    #     WHERE edits.story_id = stories.story_id
-    #     AND edits.story_id NOT IN(
-    #         SELECT story_id FROM edits
-    #         WHERE edits.user_id = 3
-    #     )
-    #     ORDER BY edits.timestamp DESC
-    #     LIMIT 1
-    # )
-
-# SELECT edits.story_id FROM edits, stories
-# WHERE edits.story_id = stories.story_id
-# AND edits.story_id NOT IN(
-#     SELECT story_id FROM edits
-#     WHERE edits.user_id=3
-# )
-# ORDER BY edits.timestamp DESC
-# LIMIT 1
-
-
-# select * from stories inner join(
-#     select distinct on(story_id) * from edits
-#     order by date_created desc
-# ) as most_recent_story_edit
-# on stories.story_id = most_recent_story_edit.story_id;
-
-# SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
-#     SELECT story_id FROM edits
-#     WHERE edits.story_id=stories.story_id
-#     AND edits.story_id NOT IN(
-#         SELECT story_id FROM edits
-#         WHERE edits.user_id=3
-#     )
-#     ORDER BY edits.timestamp DESC
-#     LIMIT 1
-# );
-
-# SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
-#     SELECT story_id FROM edits
-#     WHERE edits.story_id=stories.story_id
-#     AND edits.story_id NOT IN(
-#         SELECT story_id FROM edits
-#         WHERE edits.user_id= 3
-#     )
-#     ORDER BY edits.timestamp DESC
-#     LIMIT 1
-# );
-
-# SELECT * FROM stories INNER JOIN (
-#     SELECT edits.story_id, edits.user_id, edit, timestamp FROM edits, stories
-#     WHERE edits.story_id=stories.story_id
-#     ORDER BY edits.timestamp DESC
-#     LIMIT 1
-# ) as most_recent_edit
-# ON most_recent_edit.story_id = stories.story_id
-
-# select * from stories inner join(
-#     select * from edits
-#     order by story_id, timestamp desc
-# ) as most_recent_edit
-# on stories.story_id = most_recent_edit.story_id
-
-
-#    AND edits.story_id NOT IN(
-#        SELECT story_id FROM edits
-#        WHERE edits.user_id=4
-#    )
-
-    # SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
-    #     SELECT story_id FROM edits
-    #     WHERE edits.story_id=stories.story_id
-    #     ORDER BY edits.timestamp DESC
-    #     LIMIT 1
-    # );
-
-# select * from stories inner join(
-#     select * from edits
-#     order by story_id, timestamp desc
-#     LIMIT 1
-# ) as most_recent_edit
-# on stories.story_id = most_recent_edit.story_id
-
-
-# SELECT story_id, title FROM stories LEFT JOIN (
-#     SELECT edit, timestamp
-#     FROM edits
-#     ORDER BY stories.story_id, timestamp
-#     LIMIT 1
-# ) as recent_edit
-# ON stories.story_id = recent_edit.story_id;
-
-# SELECT stories.title, a.story_id, a.user_id, a.edit, a.timestamp FROM edits a, edits b, stories
-# WHERE a.story_id = b.story_id
-# AND a.story_id = stories.story_id
-# GROUP BY a.story_id;
-print(get_other_stories(4))
 
 db.commit()
 db.close()
