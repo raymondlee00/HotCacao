@@ -1,4 +1,7 @@
 import sqlite3  # enable control of an sqlite database
+DB_FILE = "wiki.db"
+db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+c = db.cursor()  # facilitate db ops
 
 # checkfor_credentials()
 # - @return username and password of accounts that meet the credentials in the password (either an empty touple or 1-sized touple)
@@ -115,20 +118,40 @@ def get_other_stories(user_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
-    other_stories_query = """
-    SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
+    all_stories_query = """
+        SELECT stories.title, a.story_id, a.user_id, a.edit, a.timestamp FROM edits a, edits b, stories
+        WHERE a.story_id = b.story_id
+        AND a.story_id = stories.story_id
+        GROUP BY a.story_id;
+        """ 
+    result_all_stories = list(c.execute(all_stories_query))
+    print(result_all_stories)
+
+    modified_stories_query = """
         SELECT story_id FROM edits
-        WHERE edits.story_id=stories.story_id
-        AND edits.story_id NOT IN (
-            SELECT story_id FROM edits
-            WHERE edits.user_id = %s
-        )
-        ORDER BY edits.timestamp DESC
-        LIMIT 1
-    );""" % user_id
-    result_other_stories = list(c.execute(other_stories_query))
-    print(result_other_stories)
-    return(result_other_stories)
+        WHERE edits.user_id=%s
+    """ % user_id
+    result_modified_stories = list(c.execute(modified_stories_query))
+    print(result_modified_stories)
+
+    for member in result_modified_stories:
+        member = member[0]
+    print(result_modified_stories)
+    result_modified_stories = list(dict.fromkeys(result_modified_stories))
+    print(result_modified_stories)
+
+    for i in range(len(result_all_stories)-1, -1, -1):
+        s_id = result_all_stories[i][1]
+        print(s_id)
+        for no_good in result_modified_stories:
+            print("\t%d" % no_good[0])
+            if s_id == no_good[0]:
+                result_all_stories.remove(result_all_stories[i])
+    db.commit()
+    db.close()
+    print(result_all_stories)
+    print("----------")
+    return(result_all_stories)
     # through testing, the element closest to the end of the list is the most recent edit of the story
     # result_other_stories.reverse()
     # filtered_list = list()
@@ -252,3 +275,35 @@ def modify_story(story_id, user_id, edit):
 #        SELECT story_id FROM edits
 #        WHERE edits.user_id=4
 #    )
+
+    # SELECT * FROM stories INNER JOIN edits ON edits.story_id = (
+    #     SELECT story_id FROM edits
+    #     WHERE edits.story_id=stories.story_id
+    #     ORDER BY edits.timestamp DESC
+    #     LIMIT 1
+    # );
+
+# select * from stories inner join(
+#     select * from edits
+#     order by story_id, timestamp desc
+#     LIMIT 1
+# ) as most_recent_edit
+# on stories.story_id = most_recent_edit.story_id
+
+
+# SELECT story_id, title FROM stories LEFT JOIN (
+#     SELECT edit, timestamp
+#     FROM edits
+#     ORDER BY stories.story_id, timestamp
+#     LIMIT 1
+# ) as recent_edit
+# ON stories.story_id = recent_edit.story_id;
+
+# SELECT stories.title, a.story_id, a.user_id, a.edit, a.timestamp FROM edits a, edits b, stories
+# WHERE a.story_id = b.story_id
+# AND a.story_id = stories.story_id
+# GROUP BY a.story_id;
+print(get_other_stories(4))
+
+db.commit()
+db.close()

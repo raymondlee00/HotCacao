@@ -16,15 +16,15 @@ Browse Stories
 {% block body %}
 {% for member in stories %}
   <div class="story-wrapper">
-    <h2>Title: <b>{{member[2]}}</b></h2>
-    <h3>Last Edit: "{{member[6]}}"</h3>
-    <h6>At: {{member[7]}}</h6>
+    <h2>Title: <b>{{member[0]}}</b></h2>
+    <h3>Last Edit: "{{member[3]}}"</h3>
+    <h6>At: {{member[4]}}</h6>
     <form action="/modify">
-      <input type="hidden" name="story_id" value="{{member[0]}}">
+      <input type="hidden" name="story_id" value="{{member[1]}}">
       <label for="edit">Write Your Addendum</label> <br>
       <textarea display="block" name="edit" cols="50" rows="5"></textarea>
       <br>
-      <button type="submit">Submit to "{{member[2]}}"</button>
+      <button type="submit">Submit to "{{member[0]}}"</button>
     </form>
   </div>
   <br>

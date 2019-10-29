@@ -40,3 +40,7 @@ Made it so that users cannot edit the same story twice.
 
 hilaryZ -- 2019-10-27 21:56
 Added updated design.pdf with example of Joseph's edits table, and fixed README instructions.
+
+josephY -- 2019-10-28 23:05
+Completed get_other_stories() function, pushing to test on a different machine.
+
