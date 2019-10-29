@@ -2,24 +2,27 @@
 
 {% block title %} Welcome Page {% endblock %}
 
-{% block header %} The Cacao Project {% endblock %}
+{% block header %} <h1>The Cacao Project</h1> {% endblock %}
 
 {% block body %}
 <h3>Dashboard</h3>
 <h3>You Are: >>{{username}}<<</h3>
 <h3>Account Number: >>{{id}}<<</h3>
 <h3>Member Since: >>{{date_created}}<<</h3>
+<form action="/logout" method="GET">
+  <input type="submit" value="Logout">
+</form>
 <br>
 <hr>
 {% for member in stories %}
   <div class="story-wrapper">
     <h2>Title: <b>{{member[2]}}</b></h2>
     <h3>{{member[3]}}</h3>
-    <form action="/mosify">
+    <form action="/modify">
       <input type="hidden" name="story_id" value="{{member[0]}}">
       <input type="hidden" name="story_title" value="{{member[2]}}">
       <input type="hidden" name="story_body" value="{{member[3]}}">
-    </form>  
+    </form>
   </div>
   <hr>
 {% endfor %}
@@ -28,12 +31,7 @@
 </form>
 
 <form action="/modify" method="GET">
-  <input type="submit" value="Browse Stories">
+  <input type="submit" value="Modify Stories">
 </form>
-
-<form action="/logout" method="GET">
-  <input type="submit" value="Logout">
-</form>  
-
 
 {% endblock %}

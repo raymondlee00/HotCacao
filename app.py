@@ -76,6 +76,7 @@ def modify():
         db_functions.modify_story(request.args.get('story_id'), session['id'][0][0], request.args.get('edit'))
         flash('Added to Story')
         return redirect(url_for('dashboard'))
+    print(db_functions.get_other_stories(session['id'][0][0]))
     return render_template('modify.html', stories = db_functions.get_other_stories(session['id'][0][0]))
 
 
