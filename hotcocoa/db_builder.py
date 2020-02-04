@@ -32,4 +32,4 @@ c.execute(insert_edit)
 #==========================================================
 
 db.commit()  # save changes
-db.close()  # close database
+# db.close()  # close database
