@@ -4,7 +4,7 @@
 
 import sqlite3  # enable control of an sqlite database
 
-DB_FILE = "wiki.db"
+DB_FILE = os.path.dirname("wiki.db")
 
 db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
 c = db.cursor()  # facilitate db ops
