@@ -6,4 +6,4 @@ sys.path.insert(0,"/var/www/hotcocoa/hotcocoa/")
 import logging
 logging.basicConfig(stream=sys.stderr)
 
-from hotcocoa.app import app as application
+from hotcocoa import app as application
