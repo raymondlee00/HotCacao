@@ -20,7 +20,6 @@ c = db.cursor()  # facilitate db ops
 # @param password provided by user
 # @return username and password of accounts that meet the credentials in the password (either an empty touple or 1-sized touple)
 def checkfor_credentials(username, password):
-    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
