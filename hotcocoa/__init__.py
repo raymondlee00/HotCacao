@@ -20,6 +20,8 @@ DIR = os.path.dirname(__file__) or '.'
 DIR += '/'
 
 app = Flask(__name__)  # create instance of class Flask
+print("Running my app.py={}.".format(__name__))    # ADDED THIS LINE
+print("My app={}.".format(app))                      # ADDED THIS LINE
 app.secret_key = os.urandom(24)
 database = db_functions # create instance of database interaction apparatus
 @app.route('/')
