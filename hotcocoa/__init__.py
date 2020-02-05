@@ -16,7 +16,7 @@ from utl import db_functions
 import sqlite3  # enable control of an sqlite database
 import os
 
-DIR = os.path.dirname(__file__)
+DIR = os.path.dirname(__file__) or '.'
 DIR += '/'
 
 app = Flask(__name__)  # create instance of class Flask
