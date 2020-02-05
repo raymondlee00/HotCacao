@@ -101,6 +101,8 @@ def logout():
     flash("Logged Out Succesfully")
     return redirect(url_for("index"))
 
+print("Running my app.py={}.".format(__name__))    # ADDED THIS LINE
+print("My app={}.".format(app))                      # ADDED THIS LINE
 
 if __name__ == "__main__":
     app.debug = True
