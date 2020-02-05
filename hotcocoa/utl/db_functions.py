@@ -12,6 +12,7 @@ import os
 DIR = os.path.dirname(__file__) or '.'
 DIR += '/../'
 DB_FILE = DIR + "wiki.db"
+print(DB_FILE)
 db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
 c = db.cursor()  # facilitate db ops
 
@@ -19,7 +20,7 @@ c = db.cursor()  # facilitate db ops
 # @param password provided by user
 # @return username and password of accounts that meet the credentials in the password (either an empty touple or 1-sized touple)
 def checkfor_credentials(username, password):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -34,7 +35,7 @@ def checkfor_credentials(username, password):
 # @param username of a user
 # @return null if the username does not exist, or a list containing the username if it does exsit.
 def checkfor_username(username):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -50,7 +51,7 @@ def checkfor_username(username):
 # @param passoword provided by the user
 # Creates a new user in the users table with the supplied username and password
 def create_user(username, password):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -63,7 +64,7 @@ def create_user(username, password):
 # @param username of a user in the users table
 # @return user id associated with that username
 def get_user_id(username):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -77,7 +78,7 @@ def get_user_id(username):
 # @param username of a user in the users table
 # @return the date that the user associated with the username provided was created
 def get_user_date(username):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -93,7 +94,7 @@ def get_user_date(username):
 # @param the initial text of the story being created
 # create a story in the stories table with the provided parameters as data
 def create_story(user_id, title, text):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -119,7 +120,7 @@ def create_story(user_id, title, text):
 # @param user_id of the user for which the function will retrieve stories
 # @return a list of stories that the user has contributed to, including the full text of the stories
 def get_user_stories(user_id):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -143,7 +144,7 @@ def get_user_stories(user_id):
 # @param user_id of the user for which the function will retrieve stories
 # @return a list of stories that the user HAS NOT EDITED, returning only the last edit and not the full text.
 def get_other_stories(user_id):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -189,7 +190,7 @@ def get_other_stories(user_id):
 # @param user id of a user in the users table
 # @return the username associated with that user id
 def get_user_by_id(user_id):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
@@ -206,7 +207,7 @@ def get_user_by_id(user_id):
 # @param the edit that the user is appending to the story
 # updates the story in the stories table, and adds a new entry in the edits table
 def modify_story(story_id, user_id, edit):
-    DB_FILE = "wiki.db"
+    # DB_FILE = "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
