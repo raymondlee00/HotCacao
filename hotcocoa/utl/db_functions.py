@@ -10,7 +10,7 @@ import sqlite3  # enable control of an sqlite database
 import os
 
 DIR = os.path.dirname(__file__) or '.'
-DIR += '/../'
+DIR += '/'
 DB_FILE = DIR + "wiki.db"
 print(DB_FILE)
 db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -35,7 +35,7 @@ def checkfor_credentials(username, password):
 # @param username of a user
 # @return null if the username does not exist, or a list containing the username if it does exsit.
 def checkfor_username(username):
-    DB_FILE = DIR + "wiki.db"
+    # DB_FILE = DIR + "wiki.db"
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()  # facilitate db ops
 
